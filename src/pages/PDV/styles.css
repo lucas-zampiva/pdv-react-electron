@@ -1,0 +1,149 @@
+body,
+html {
+    font-size: 15px;
+    height: 100%;
+}
+
+.pdv-container {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+}
+
+.menu {
+    width: 100%;
+}
+
+.menu .pdv-title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: #4CAF50;
+}
+
+.container {
+    flex: 1;
+    display: flex;
+    height: 83%;
+}
+
+.container-1 {
+    flex: 7;
+    overflow: auto;
+}
+
+.table-wrapper {
+    position: relative;
+    /* Adiciona posicionamento relativo */
+}
+
+.table-wrapper table {
+    width: 100%;
+}
+
+.table-wrapper thead {
+    position: sticky;
+    top: 0;
+}
+
+.table-wrapper tbody {
+    overflow: auto;
+}
+
+.table-wrapper tfoot {
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+.container-1 .pdv-products-table {
+    width: 100%;
+    padding: 10px;
+}
+
+.container-1 .pdv-products-table th {
+    text-align: left;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.container-1 td {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.container-1 .pdv-products-table th,
+.container-1 .pdv-products-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+}
+
+.container-2 {
+    flex: 3;
+    background-color: #eee;
+}
+
+.container-2 .pdv-add-to-cart-container {
+    padding: 10px;
+}
+
+.container-2 .pdv-label {
+    color: #4CAF50;
+}
+
+.container-2 .pdv-input {
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #4CAF50;
+    outline: none;
+    width: 90%;
+    margin: 10px 0px 10px 0px;
+}
+
+.container-2 .pdv-input2 {
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #4CAF50;
+    outline: none;
+    width: 15%;
+    margin: 10px 3px 10px 0px;
+}
+
+.container-2 .pdv-add-to-cart-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.container-2 .pdv-add-to-cart-button:hover {
+    background-color: #2E8B57;
+}
+
+.container-2 .pdv-cart-container {
+    margin-top: 30px;
+}
+
+.container-2 .pdv-finish-sale-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.container-2 .pdv-finish-sale-button:hover {
+    background-color: #2E8B57;
+}
