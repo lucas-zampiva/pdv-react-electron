@@ -14,7 +14,6 @@ class Database {
         email TEXT
       )
     `;
-
     this.db.run(sql);
 
     const sql2 = `
@@ -25,14 +24,21 @@ class Database {
         preco decimal(12, 3)
       )
     `;
-
     this.db.run(sql2);
 
     const insertsProdutos = `
       INSERT INTO products (nome, codigo, preco) VALUES ('produto teste', 'ptest-1', 123.50)
     `;
-
     this.db.run(insertsProdutos);
+
+    const sql3 = `
+      CREATE TABLE IF NOT EXISTS orders (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        json TEXT
+      )
+    `;
+
+    this.db.run(sql3);
   }
 
   selectAll(callback) {
@@ -81,6 +87,39 @@ class Database {
     `;
 
     this.db.all(sql, [], callback);
+  }
+
+  insertVenda(order, callback) {
+    console.log(JSON.stringify(order));
+    const sql = `
+      INSERT INTO orders (json) VALUES (?)
+    `;
+
+    this.db.run(sql, [JSON.stringify(order)], callback);
+  }
+
+  selectAllOrders(callback) {
+    const sql = `
+      SELECT * FROM orders
+    `;
+
+    this.db.all(sql, [], callback);
+  }
+
+  deleteVenda(id, callback) {
+    const sql = `
+      DELETE FROM orders WHERE id = ?
+    `;
+
+    this.db.run(sql, [id], callback);
+  }
+
+  insertProduct(product, callback) {
+    const sql = `
+      INSERT INTO products (nome, codigo, preco) VALUES (?, ?, ?)
+    `;
+
+    this.db.run(sql, [product.nome, product.codigo, product.preco], callback);
   }
 }
 

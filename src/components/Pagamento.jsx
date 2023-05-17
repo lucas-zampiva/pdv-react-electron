@@ -19,7 +19,12 @@ export default function Pagamento({ onClose, valorVenda }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const dadosPagamento = {};
+        const valorVendaComDesconto = (valorVenda - (valorVenda * (desconto / 100)));
+        const dadosPagamento = {
+            formaPagamento: formaPagamento,
+            desconto: desconto,
+            valorVenda: valorVendaComDesconto
+        };
         onClose(dadosPagamento); // Fechar a modal após a submissão
     };
 

@@ -15,6 +15,7 @@ function PDV() {
     const tbodyRef = useRef(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalPagamentoOpen, setModalPagamentoOpen] = useState(false);
+    const [dadosContatoVenda, setDadosContatoVenda] = useState({});
 
     useEffect(() => {
         ipcRenderer.send('getAllProducts');
@@ -86,14 +87,22 @@ function PDV() {
     };
 
     const handleCloseModal = (dadosContato) => {
-        console.table(dadosContato)
+        setDadosContatoVenda(dadosContato);
         setModalOpen(false);
         setModalPagamentoOpen(true);
     };
 
     const handleCloseModalPagamento = (dadosPagamento) => {
-        console.table(dadosPagamento)
         setModalPagamentoOpen(false);
+
+        const venda = {
+            itens: carrinho,
+            contato: dadosContatoVenda,
+            pagamento: dadosPagamento
+        }
+
+        ipcRenderer.send('addVenda', venda);
+        handleCancelSale();
     };
 
     const handleCancelSale = () => {
