@@ -9,8 +9,8 @@ let mainWindow;
 
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1278,
+        height: 978,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -20,6 +20,7 @@ function createWindow() {
     });
     mainWindow.webContents.openDevTools();
     mainWindow.loadURL('http://localhost:3000');
+    //mainWindow.setFullScreen(true);
 }
 
 // Verifique se há conexão com a internet
@@ -68,6 +69,19 @@ function buscaVendas() {
     });
 }
 
+function buscaProdutosNovos() {
+    temConexaoComInternet().then((conexaoAtiva) => {
+        /*axios.get('https://sua-api.com/products-novos')
+            .then(function (response) {
+                db.insertProduct(response);
+            }).catch(function (error) {
+                console.error(error);
+            });*/
+    }).catch((error) => {
+        console.error('Erro ao verificar a conexão com a internet:', error);
+    });
+}
+
 function buscaTodosProdutos() { //somente se não tiver nenhum cadastrado
     db.selectAllProducts((err, rows) => {
         if (err || rows.length == 0) {
@@ -85,52 +99,16 @@ function buscaTodosProdutos() { //somente se não tiver nenhum cadastrado
 app.whenReady().then(() => {
     createWindow();
     buscaTodosProdutos();
-    const interval = 1 * 60 * 1000;
+    const interval = 5 * 60 * 1000;
+    const interval2 = 30 * 60 * 1000;
     setInterval(buscaVendas, interval);
+    setInterval(buscaProdutosNovos, interval2);
 
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
             createWindow();
         }
     });
-
-    /*ipcMain.on('getAllUsers', (event) => {
-        db.selectAll((err, rows) => {
-            if (err) {
-                console.error(err);
-                event.reply('getAllUsers', []);
-            } else {
-                event.reply('getAllUsers', rows);
-            }
-        });
-    });
-
-    ipcMain.on('addUser', (event, user) => {
-        db.insert(user, (err) => {
-            if (err) {
-                console.error(err);
-            }
-            event.reply('addUser', err ? null : user);
-        });
-    });
-
-    ipcMain.on('updateUser', (event, user) => {
-        db.update(user, (err) => {
-            if (err) {
-                console.error(err);
-            }
-            event.reply('updateUser', err ? null : user);
-        });
-    });
-
-    ipcMain.on('deleteUser', (event, id) => {
-        db.delete(id, (err) => {
-            if (err) {
-                console.error(err);
-            }
-            event.reply('deleteUser', err ? null : id);
-        });
-    });*/
 
     ipcMain.on('getAllProducts', (event) => {
         db.selectAllProducts((err, rows) => {
