@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import ReactDOM from 'react-dom';
 import "./styles.css";
 import Contato from "../../components/Contato";
 import Pagamento from "../../components/Pagamento";
@@ -45,7 +44,7 @@ function PDV() {
     };
 
     const handleProductQtdChange = (action) => {
-        if (action == 'plus') {
+        if (action === 'plus') {
             let qtd = productQtd + 1;
             setProductQtd(qtd);
         } else {
@@ -59,7 +58,7 @@ function PDV() {
     };
 
     const handleProductCartQtdChange = (action, product, position) => {
-        if (action == 'plus') {
+        if (action === 'plus') {
             product.quantidade = product.quantidade + 1;
             carrinho[position] = product;
         } else {
@@ -85,26 +84,6 @@ function PDV() {
         } else {
             console.log('produto nao encontrado');
         }
-    };
-
-    const handleFinishSale = () => {
-        const popupWindow = window.open('', 'popupWindow', 'width=800,height=600');
-        popupWindow.document.title = 'Meu Formulário';
-
-        popupWindow.document.body.innerHTML = `
-              <html>
-                <head>
-                  <title>Meu Formulário</title>
-                </head>
-                <body>
-                  <div id="formContainer"></div>
-                </body>
-              </html>
-            `;
-
-        const formContainer = popupWindow.document.getElementById('formContainer');
-        ReactDOM.render(<Contato />, formContainer);
-
     };
 
     const handleOpenModal = () => {
@@ -143,9 +122,9 @@ function PDV() {
                 <div className="card-header">
                     <h1 className="card-title fw-bold text-gray-800 fs-2qx">Venda atual</h1>
                     <div className="card-toolbar">
-                        <a href="#" onClick={handleCancelSale} className="btn btn-light-primary fs-4 fw-bold py-4">
+                        <button onClick={handleCancelSale} className="btn btn-light-primary fs-4 fw-bold py-4">
                             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" viewBox="0 0 24 24"> <g> <path fill="none" d="M0 0h24v24H0z" /> <path d="M4 8h16v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8zm2 2v10h12V10H6zm3 2h2v6H9v-6zm4 0h2v6h-2v-6zM7 5V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v2h5v2H2V5h5zm2-1v1h6V4H9z" /> </g> </svg>
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -227,13 +206,13 @@ function PDV() {
                                 <button type="button" onClick={() => handleProductQtdChange('plus')} className="btn btn-icon btn-sm btn-light btn-icon-gray-400" data-kt-dialer-control="increase">
                                     <i className="ki-duotone ki-plus fs-3x"></i>
                                 </button>
-                                <button style={{ width: "100%" }} onClick={handleAddToCart} className="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"> <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" /> </svg></button>
+                                <button style={{ width: "100%", marginLeft: "10px" }} onClick={handleAddToCart} className="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"> <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" /> </svg></button>
                             </div>
                         </div>
                         {carrinho.length >= 1 && (
                             <>
                                 <div className="card-rounded bg-primary bg-opacity-5 p-10 mb-15 pdv-resume-product">
-                                    <h3 className="text-dark fw-bold mb-11">Último produto lido:</h3>
+                                    <h3 className="text-dark fw-bold mb-11">Último produto:</h3>
                                     <div className="d-flex align-items-center">
                                         <i className="ki-duotone ki-barcode fs-1 text-primary me-5">
                                             <span className="path1"></span>

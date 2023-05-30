@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, Box } from '@mui/material';
+import { Modal, Box } from '@mui/material';
 import "../pages/PDV/styles.css";
 
 const style = {
@@ -60,7 +60,7 @@ export default function Contato({ onClose }) {
     };
 
     return (
-        <Modal open={true} onClose={onClose}>
+        <Modal open={true} onClose={onClose} slotProps={{ backdrop: { onClick: () => { } } }} disableEscapeKeyDown>
             <Box sx={style}>
                 <h2>Dados do contato</h2>
                 <form onSubmit={handleSubmit}>
@@ -108,7 +108,7 @@ export default function Contato({ onClose }) {
                     <div className="row mb-5">
                         <div className="col-md fv-row fv-plugins-icon-container">
                             <label className="required fs-5 fw-semibold mb-2">UF</label>
-                            <select name="category" data-control="select2" value={estado} onChange={e => setEstado(e.target.value)} data-hide-search="true" data-placeholder="Select a Category..." className="form-select form-select-solid " data-select2-id="select2-data-13-ysyc" tabindex="-1" aria-hidden="true" data-kt-initialized="1">
+                            <select name="category" data-control="select2" value={estado} onChange={e => setEstado(e.target.value)} data-hide-search="true" data-placeholder="Select a Category..." className="form-select form-select-solid " data-select2-id="select2-data-13-ysyc" tabIndex="-1" aria-hidden="true" data-kt-initialized="1">
                                 <option value="XX" data-select2-id="select2-data-15-5clv">Fantasia</option>
                                 <option value="AC" data-select2-id="select2-data-15-5clv">Acre</option>
                                 <option value="AL" data-select2-id="select2-data-15-5clv">Alagoas</option>
@@ -140,8 +140,8 @@ export default function Contato({ onClose }) {
                             </select>
                         </div>
                     </div>
-                    <button type="button" onClick={handleFantasiaContato} className="btn btn-light-primary fs-4 fw-bold py-4">Fantasia</button>
-                    <Button type="submit" className='btn btn-primary'>Enviar</Button>
+                    <button type="button" onClick={handleFantasiaContato} className="btn btn-light-primary">Fantasia</button>
+                    <button type="submit" className='btn btn-primary' style={{ marginLeft: "10px" }} >Enviar</button>
                 </form>
             </Box>
         </Modal >
