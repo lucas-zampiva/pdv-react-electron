@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import "./styles.css";
 import Contato from "../../components/Contato";
 import Pagamento from "../../components/Pagamento";
-const { ipcRenderer } = window.require('electron');
-
 
 function PDV() {
     const [products, setProducts] = useState([]);
@@ -17,14 +15,9 @@ function PDV() {
     const [dadosContatoVenda, setDadosContatoVenda] = useState({});
 
     useEffect(() => {
-        ipcRenderer.send('getAllProducts');
-        ipcRenderer.on('getAllProducts', (event, rows) => {
-            setProducts(rows);
-        });
-
-        return () => {
-            ipcRenderer.removeAllListeners('getAllProducts');
-        };
+        window.electron.receive('getAllProducts').then((products) => {
+            setProducts(products);
+        })
     }, []);
 
     useEffect(() => {
@@ -105,7 +98,7 @@ function PDV() {
             pagamento: dadosPagamento
         }
 
-        ipcRenderer.send('addVenda', venda);
+        window.electron.send('addVenda', venda);
         handleCancelSale();
     };
 

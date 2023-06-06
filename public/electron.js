@@ -1,27 +1,57 @@
-const { app, BrowserWindow, ipcMain, net } = require('electron');
+const { app, BrowserWindow, ipcMain, protocol, net } = require('electron');
 const path = require('path');
+const url = require("url");
 const Database = require('./database');
-const axios = require('axios');
-
-const db = new Database(path.join(__dirname, 'database.sqlite'));
-
 let mainWindow;
+
+const db = new Database(
+    path.join(process.resourcesPath, 'database.sqlite'), // the resources path if in production build
+    (err) => {
+        if (err) {
+            console.log(`Database Error: ${err}`);
+        } else {
+            console.log('Database Loaded');
+        }
+    }
+);
 
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1278,
         height: 978,
         webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-            enableRemoteModule: true,
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, "preload.js"),
         }
     });
-    mainWindow.webContents.openDevTools();
-    mainWindow.loadURL('http://localhost:3000');
-    //mainWindow.setFullScreen(true);
+
+    const appURL = app.isPackaged
+        ? url.format({
+            pathname: path.join(__dirname, "index.html"),
+            protocol: "file:",
+            slashes: true,
+        })
+        : "http://localhost:3000";
+
+    mainWindow.loadURL(appURL);
+
+    if (!app.isPackaged) {
+        mainWindow.webContents.openDevTools();
+    }
 }
+
+function setupLocalFilesNormalizerProxy() {
+    protocol.registerHttpProtocol(
+        "file",
+        (request, callback) => {
+            const url = request.url.substr(8);
+            callback({ path: path.normalize(`${__dirname}/${url}`) });
+        },
+        (error) => {
+            if (error) console.error("Failed to register protocol");
+        }
+    );
+}
+
 
 // Verifique se há conexão com a internet
 function temConexaoComInternet() {
@@ -95,10 +125,25 @@ function buscaTodosProdutos() { //somente se não tiver nenhum cadastrado
     });
 }
 
+ipcMain.handle('getAllProducts', async (event) => {
+    return new Promise((resolve, reject) => {
+        db.selectAllProducts((err, rows) => {
+            if (err) {
+                console.error(err);
+                resolve([]); // Retorna um array vazio em caso de erro
+            } else {
+                //console.log(rows);
+                resolve(rows); // Resolve a promessa com os rows
+            }
+        });
+    });
+});
+
 
 app.whenReady().then(() => {
     createWindow();
     buscaTodosProdutos();
+    setupLocalFilesNormalizerProxy();
     const interval = 5 * 60 * 1000;
     const interval2 = 30 * 60 * 1000;
     setInterval(buscaVendas, interval);
@@ -110,17 +155,6 @@ app.whenReady().then(() => {
         }
     });
 
-    ipcMain.on('getAllProducts', (event) => {
-        db.selectAllProducts((err, rows) => {
-            if (err) {
-                console.error(err);
-                event.reply('getAllProducts', []);
-            } else {
-                event.reply('getAllProducts', rows);
-            }
-        });
-    });
-
     ipcMain.on('addVenda', (event, venda) => {
         db.insertVenda(venda, (err) => {
             if (err) {
@@ -129,10 +163,22 @@ app.whenReady().then(() => {
             event.reply('addVenda', err ? null : venda);
         });
     });
+
+
 });
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit();
     }
+});
+
+const allowedNavigationDestinations = "https://my-app.com";
+app.on("web-contents-created", (event, contents) => {
+    contents.on("will-navigate", (event, navigationURL) => {
+        const parsedURL = new URL(navigationURL);
+        if (!allowedNavigationDestinations.includes(parsedURL.origin)) {
+            event.preventDefault();
+        }
+    });
 });
